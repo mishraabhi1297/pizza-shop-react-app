@@ -1,19 +1,10 @@
-import { useSelector } from "react-redux";
-import { RootState } from "./store";
+import Order from "./components/Order";
 
 function App() {
-  const locations = useSelector(
-    (state: RootState) => state.locationSlice.locations
-  );
-
   return (
-    <div>
+    <div style={{ padding: "20px" }}>
       <h1>Welcome to Dynamite Pizza</h1>
-      {locations.map((location) => (
-        <h2>
-          {location.id}: {location.name} - {location.pizzas.length}
-        </h2>
-      ))}
+      <Order />
     </div>
   );
 }
