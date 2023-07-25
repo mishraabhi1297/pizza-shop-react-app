@@ -2,9 +2,11 @@ import { useSelector } from "react-redux";
 import { RootState } from "../store";
 import { useState } from "react";
 import { isNullOrEmpty } from "../utils/stringUtils";
+import { IPizza } from "../models/pizza";
 
 function Order() {
   const [selectedLocation, setSelectedLocation] = useState<string>("");
+  const [orderedPizzas, setOrderedPizzas] = useState<IPizza[]>([]);
 
   const locations = useSelector(
     (state: RootState) => state.locationSlice.locations
@@ -12,6 +14,10 @@ function Order() {
 
   const onLocationChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedLocation(event.target.value);
+  };
+
+  const addPizzaToOrder = (pizza: IPizza) => {
+    setOrderedPizzas((prev) => [...prev, pizza]);
   };
 
   return (
@@ -33,10 +39,32 @@ function Order() {
           {locations
             .find((x) => x.id.toString() === selectedLocation)
             ?.pizzas.map((pizza) => (
-              <p key={pizza.id}>
-                {pizza.name} - ${pizza.price}
-              </p>
+              <span key={pizza.id} style={{ display: "flex" }}>
+                <p style={{ margin: "5px" }}>
+                  {pizza.name} - ${pizza.price}
+                </p>
+                <button
+                  style={{ margin: "5px" }}
+                  onClick={() => addPizzaToOrder(pizza)}
+                >
+                  Add
+                </button>
+              </span>
             ))}
+          {orderedPizzas.length > 0 && (
+            <div>
+              <h3>Ordered Pizzas</h3>
+              {orderedPizzas.map((orderedPizza, index) => (
+                <p key={index}>
+                  {orderedPizza.name} - ${orderedPizza.price}
+                </p>
+              ))}
+              <h4>
+                Total price: $
+                {orderedPizzas.reduce((sum, pizza) => sum + pizza.price, 0)}
+              </h4>
+            </div>
+          )}
         </div>
       )}
     </div>
