@@ -3,6 +3,7 @@ import { RootState } from "../store";
 import { useState } from "react";
 import { isNullOrEmpty } from "../utils/stringUtils";
 import { IPizza } from "../models/pizza";
+import Dropdown, { IDropdownOption } from "./Dropdown";
 
 function Order() {
   const [selectedLocation, setSelectedLocation] = useState<string>("");
@@ -20,18 +21,21 @@ function Order() {
     setOrderedPizzas((prev) => [...prev, pizza]);
   };
 
+  const locationDropdownOptions: IDropdownOption[] = locations.map(
+    (location) => ({
+      value: location.id.toString(),
+      label: location.name,
+    })
+  );
+
   return (
     <div>
       <h2>Select a location to place an order</h2>
       {locations.length > 0 && (
-        <select value={selectedLocation} onChange={onLocationChange}>
-          <option value="">Select a location</option>
-          {locations.map((location) => (
-            <option key={location.id} value={location.id}>
-              {location.name}
-            </option>
-          ))}
-        </select>
+        <Dropdown
+          options={locationDropdownOptions}
+          onChange={onLocationChange}
+        />
       )}
       {!isNullOrEmpty(selectedLocation) && (
         <div>
