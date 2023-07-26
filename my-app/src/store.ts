@@ -1,8 +1,12 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import locationSlice from './reduxSlices/locationSlice'
+import ingredientSlice from './reduxSlices/ingredientSlice';
+import orderSlice from './reduxSlices/orderSlice';
 
 const rootReducer = combineReducers({ 
-  locationSlice: locationSlice
+  locationSlice: locationSlice,
+  ingredientSlice: ingredientSlice,
+  orderSlice: orderSlice
 });
 
 export const store = configureStore({
