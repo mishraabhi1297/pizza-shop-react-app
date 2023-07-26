@@ -17,17 +17,20 @@ const getInitialLocations = () : ILocation[] => {
       {
         id: 89283,
         name: "Capricciosa",
-        price: 20
+        price: 20,
+        ingredients: [ "Cheese", "Ham", "Mushrooms", "Olives" ]
       },
       {
         id: 9282743,
         name: "Mexicana",
-        price: 18
+        price: 18,
+        ingredients: [ "Cheese", "Salami", "Capsicum", "Chilli" ]
       },
       {
         id: 1273009,
         name: "Margherita",
-        price: 22
+        price: 22,
+        ingredients: [ "Cheese", "Spinach", "Ricotta", "Cherry Tomatoes" ]
       }
     ]
   };
@@ -40,12 +43,14 @@ const getInitialLocations = () : ILocation[] => {
       {
         id: 728273,
         name: "Capricciosa",
-        price: 25
+        price: 25,
+        ingredients: [ "Cheese", "Ham", "Mushrooms", "Olives" ]
       },
       {
         id: 9482734,
         name: "Vegetarian",
-        price: 17
+        price: 17,
+        ingredients: [ "Cheese", "Mushrooms", "Capsicum", "Onion", "Olives" ]
       }
     ]
   };

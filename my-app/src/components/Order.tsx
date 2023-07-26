@@ -1,12 +1,14 @@
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
 import { useState } from "react";
-import { isNullOrEmpty } from "../utils/stringUtils";
 import { IPizza } from "../models/pizza";
 import Dropdown, { IDropdownOption } from "./Dropdown";
+import { ILocation } from "../models/location";
 
 function Order() {
-  const [selectedLocation, setSelectedLocation] = useState<string>("");
+  const [selectedLocation, setSelectedLocation] = useState<
+    ILocation | undefined
+  >(undefined);
   const [orderedPizzas, setOrderedPizzas] = useState<IPizza[]>([]);
 
   const locations = useSelector(
@@ -14,7 +16,10 @@ function Order() {
   );
 
   const onLocationChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedLocation(event.target.value);
+    setSelectedLocation(
+      locations.find((x) => x.id.toString() === event.target.value)
+    );
+    setOrderedPizzas([]);
   };
 
   const addPizzaToOrder = (pizza: IPizza) => {
@@ -22,7 +27,7 @@ function Order() {
   };
 
   const locationDropdownOptions: IDropdownOption[] = locations.map(
-    (location) => ({
+    (location): IDropdownOption => ({
       value: location.id.toString(),
       label: location.name,
     })
@@ -37,30 +42,29 @@ function Order() {
           onChange={onLocationChange}
         />
       )}
-      {!isNullOrEmpty(selectedLocation) && (
+      {selectedLocation !== undefined && (
         <div>
-          <h3>Here is the list of available pizzas to choose from</h3>
-          {locations
-            .find((x) => x.id.toString() === selectedLocation)
-            ?.pizzas.map((pizza) => (
-              <span key={pizza.id} style={{ display: "flex" }}>
-                <p style={{ margin: "5px" }}>
-                  {pizza.name} - ${pizza.price}
-                </p>
-                <button
-                  style={{ margin: "5px" }}
-                  onClick={() => addPizzaToOrder(pizza)}
-                >
-                  Add
-                </button>
-              </span>
-            ))}
+          <h3>Available pizzas at {selectedLocation!.name}</h3>
+          {selectedLocation!.pizzas.map((pizza) => (
+            <span key={pizza.id} style={{ display: "flex" }}>
+              <p style={{ margin: "5px" }}>
+                {pizza.name} - {pizza.ingredients.join(", ")} - ${pizza.price}
+              </p>
+              <button
+                style={{ margin: "5px" }}
+                onClick={() => addPizzaToOrder(pizza)}
+              >
+                Add
+              </button>
+            </span>
+          ))}
           {orderedPizzas.length > 0 && (
             <div>
               <h3>Ordered Pizzas</h3>
               {orderedPizzas.map((orderedPizza, index) => (
                 <p key={index}>
-                  {orderedPizza.name} - ${orderedPizza.price}
+                  {orderedPizza.name} - {orderedPizza.ingredients.join(", ")} -
+                  ${orderedPizza.price}
                 </p>
               ))}
               <h4>
